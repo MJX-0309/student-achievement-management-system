@@ -8,7 +8,6 @@
             <id property="teacherId" column="teacher_id" jdbcType="BIGINT"/>
             <result property="collegeId" column="college_id" jdbcType="BIGINT"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
-            <result property="college" column="college" jdbcType="BIGINT"/>
             <result property="gender" column="gender" jdbcType="TINYINT"/>
             <result property="birth" column="birth" jdbcType="TIMESTAMP"/>
             <result property="remark" column="remark" jdbcType="VARCHAR"/>
@@ -19,4 +18,7 @@
         college,gender,birth,
         remark
     </sql>
+    <select id="getNameById" resultType="java.lang.String">
+        SELECT student_achievement.college.name FROM student_achievement.college
+    </select>
 </mapper>
