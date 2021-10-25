@@ -13,4 +13,7 @@
     <sql id="Base_Column_List">
         major_id,name,college
     </sql>
+    <select id="getNameByiId" resultType="java.lang.String">
+        SELECT name FROM student_achievement.major WHERE major_id=#{id}
+    </select>
 </mapper>
