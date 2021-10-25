@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
  */
 @Api("教师管理Api")
 @RestController
+@RequestMapping("teacher")
 public class TeacherController {
 
     @Autowired

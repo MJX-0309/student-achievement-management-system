@@ -18,7 +18,5 @@
         college,gender,birth,
         remark
     </sql>
-    <select id="getNameById" resultType="java.lang.String">
-        SELECT student_achievement.college.name FROM student_achievement.college
-    </select>
+
 </mapper>

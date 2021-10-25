@@ -3,6 +3,7 @@ package edu.zhku.boot.mapper;
 import edu.zhku.boot.entity.Teacher;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.mybatis.spring.annotation.MapperScan;
 
 /**
@@ -10,7 +11,7 @@ import org.mybatis.spring.annotation.MapperScan;
  */
 @Mapper
 public interface TeacherMapper extends BaseMapper<Teacher> {
-    String getNameById(Long id);
+
 }
 
 
