@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:mysql://39.108.234.60:3306/student_achievement
+    username: root
+    password: 1585225345
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.zhku.boot.mapper.CourseMapper">
+
+    <resultMap id="BaseResultMap" type="edu.zhku.boot.entity.Course">
+            <id property="courseId" column="course_id" jdbcType="BIGINT"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="collegeId" column="college_id" jdbcType="BIGINT"/>
+            <result property="type" column="type" jdbcType="TINYINT"/>
+            <result property="theoreticalHours" column="theoretical_hours" jdbcType="DECIMAL"/>
+            <result property="practicalHours" column="practical_hours" jdbcType="DECIMAL"/>
+            <result property="credit" column="credit" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        course_id,name,college_id,
+        type,theoretical_hours,practical_hours,
+        credit
+    </sql>
+</mapper>

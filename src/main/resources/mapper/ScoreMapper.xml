@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.zhku.boot.mapper.ScoreMapper">
+
+    <resultMap id="BaseResultMap" type="edu.zhku.boot.entity.Score">
+            <result property="courseId" column="course_id" jdbcType="BIGINT"/>
+            <result property="studentId" column="student_id" jdbcType="BIGINT"/>
+            <result property="regularGrade" column="regular_grade" jdbcType="DECIMAL"/>
+            <result property="endtermGrade" column="endterm_grade" jdbcType="DECIMAL"/>
+            <result property="regularRatio" column="regular_ratio" jdbcType="DECIMAL"/>
+            <result property="endtermRatio" column="endterm_ratio" jdbcType="DECIMAL"/>
+            <result property="score" column="score" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        course_id,student_id,regular_grade,
+        endterm_grade,regular_ratio,endterm_ratio,
+        score
+    </sql>
+</mapper>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.zhku.boot.mapper.SelectCourseMapper">
+
+    <resultMap id="BaseResultMap" type="edu.zhku.boot.entity.SelectCourse">
+            <id property="teacherId" column="teacher_id" jdbcType="BIGINT"/>
+            <id property="courseId" column="course_id" jdbcType="BIGINT"/>
+            <result property="isAuthorized" column="is_authorized" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        teacher_id,course_id,is_authorized
+    </sql>
+</mapper>

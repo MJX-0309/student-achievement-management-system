@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.zhku.boot.mapper.StudentMapper">
+
+    <resultMap id="BaseResultMap" type="edu.zhku.boot.entity.Student">
+            <id property="studentId" column="student_id" jdbcType="BIGINT"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="major" column="major" jdbcType="BIGINT"/>
+            <result property="gender" column="gender" jdbcType="TINYINT"/>
+            <result property="birth" column="birth" jdbcType="TIMESTAMP"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        student_id,name,major,
+        gender,birth,remark
+    </sql>
+</mapper>
