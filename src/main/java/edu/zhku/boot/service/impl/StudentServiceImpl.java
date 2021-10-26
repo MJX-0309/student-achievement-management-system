@@ -46,7 +46,9 @@ implements StudentService{
         QueryWrapper<Student> wrapper = new QueryWrapper<>();
 
         if (StringUtils.hasText(queryVo.getKeyword())){
-            wrapper.like("name",queryVo.getKeyword())
+            wrapper.like("student_id",queryVo.getKeyword())
+                    .or()
+                    .like("name",queryVo.getKeyword())
                     .or()
                     .like("remark",queryVo.getKeyword());
         }

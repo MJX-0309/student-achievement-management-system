@@ -22,6 +22,9 @@ public class StudentInfoVo {
     @ApiModelProperty("姓名")
     private String name;
 
+    @ApiModelProperty("学院")
+    private String college;
+
     @ApiModelProperty("专业")
     private String major;
 

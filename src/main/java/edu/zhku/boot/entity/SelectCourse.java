@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -15,6 +16,7 @@ import lombok.Data;
  * @author MJX
  * @TableName select_course
  */
+@AllArgsConstructor
 @TableName(value ="select_course")
 @Data
 @ApiModel("选课")
