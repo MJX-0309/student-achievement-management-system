@@ -20,15 +20,13 @@ import lombok.Data;
 @ApiModel("选课")
 public class SelectCourse {
 
-    @TableId
     @ApiModelProperty("教师id")
     private Long teacherId;
 
-    @TableId
     @ApiModelProperty("课程id")
     private Long courseId;
 
     @ApiModelProperty("可给成绩")
-    private Byte isAuthorized;
+    private Integer isAuthorized=1;
 
 }

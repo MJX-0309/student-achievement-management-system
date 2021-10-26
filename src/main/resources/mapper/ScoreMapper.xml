@@ -9,8 +9,6 @@
             <result property="studentId" column="student_id" jdbcType="BIGINT"/>
             <result property="regularGrade" column="regular_grade" jdbcType="DECIMAL"/>
             <result property="endtermGrade" column="endterm_grade" jdbcType="DECIMAL"/>
-            <result property="regularRatio" column="regular_ratio" jdbcType="DECIMAL"/>
-            <result property="endtermRatio" column="endterm_ratio" jdbcType="DECIMAL"/>
             <result property="score" column="score" jdbcType="DECIMAL"/>
     </resultMap>
 
@@ -19,4 +17,9 @@
         endterm_grade,regular_ratio,endterm_ratio,
         score
     </sql>
+    <update id="reset">
+         UPDATE student_achievement.score
+         SET regular_grade=null,endterm_grade=null,score=null
+         WHERE course_id=#{courseId} AND student_id=#{studentId}
+    </update>
 </mapper>

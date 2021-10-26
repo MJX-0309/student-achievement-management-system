@@ -8,6 +8,7 @@ import edu.zhku.boot.service.TeacherService;
 import edu.zhku.boot.vo.TeacherInfoVo;
 import edu.zhku.boot.vo.TeacherQueryVo;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,30 +31,35 @@ public class TeacherController {
     @Autowired
     private TeacherService teacherService;
 
+    @ApiOperation("通过id获取")
     @GetMapping("/getById/{id}")
     public Result getById(@PathVariable Long id){
         TeacherInfoVo teacher = teacherService.getTeacherById(id);
         return Result.success(teacher);
     }
 
+    @ApiOperation("新增")
     @PostMapping("/save")
     public Result save(@RequestBody Teacher teacher){
         teacherService.save(teacher);
         return Result.success();
     }
 
+    @ApiOperation("更新")
     @PutMapping("/update")
     public Result update(@RequestBody Teacher teacher){
         teacherService.updateById(teacher);
         return Result.success();
     }
 
+    @ApiOperation("删除")
     @DeleteMapping("/delete/{id}")
     public Result deleteById(@PathVariable Long id){
         teacherService.removeById(id);
         return Result.success();
     }
 
+    @ApiOperation("分页查询")
     @GetMapping("/page/{current}/{size}")
     public Result queryPage(@PathVariable Long current,
                             @PathVariable Long size,
