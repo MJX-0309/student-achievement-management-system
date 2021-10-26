@@ -3,8 +3,10 @@ package edu.zhku.boot.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import edu.zhku.boot.common.model.Result;
 import edu.zhku.boot.entity.Course;
+import edu.zhku.boot.entity.CourseType;
 import edu.zhku.boot.entity.Student;
 import edu.zhku.boot.service.CourseService;
+import edu.zhku.boot.service.CourseTypeService;
 import edu.zhku.boot.vo.CourseInfoVo;
 import edu.zhku.boot.vo.CourseQueryVo;
 import io.swagger.annotations.Api;
@@ -12,6 +14,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author MJX
@@ -23,6 +27,9 @@ import org.springframework.web.bind.annotation.*;
 public class CourseController {
     @Autowired
     private CourseService courseService;
+
+    @Autowired
+    private CourseTypeService courseTypeService;
 
     @ApiOperation("通过id获取")
     @GetMapping("/getById/{id}")
@@ -59,5 +66,12 @@ public class CourseController {
                             @RequestBody(required = false)CourseQueryVo vo){
         IPage<CourseInfoVo> page=courseService.getCourseInfoVoPage(current,size,vo);
         return Result.success(page);
+    }
+
+    @ApiOperation("获取所有课程类型")
+    @GetMapping("/getTypeList")
+    public Result getTypeList(){
+        List<Course> list = courseService.list();
+        return Result.success(list);
     }
 }
