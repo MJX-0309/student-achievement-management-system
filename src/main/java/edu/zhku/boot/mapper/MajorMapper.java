@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 /**
- * @Entity edu.zhku.boot.entity.Major
+ * @Entity edu.zhku.boot.entity.MajorInfoVo
  */
 @Mapper
 public interface MajorMapper extends BaseMapper<Major> {

@@ -59,6 +59,7 @@ implements CourseService{
                     .like("course_id",vo.getKeyword());
         }
         baseMapper.selectPage(page,wrapper);
+        BeanUtils.copyProperties(page,voPage);
         List<CourseInfoVo> list = page.getRecords().stream().map(course -> {
             CourseInfoVo infoVo = new CourseInfoVo();
             BeanUtils.copyProperties(course, infoVo);

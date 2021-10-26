@@ -3,7 +3,6 @@ package edu.zhku.boot.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import edu.zhku.boot.common.model.Result;
 import edu.zhku.boot.entity.SelectCourse;
-import edu.zhku.boot.service.ScoreService;
 import edu.zhku.boot.service.SelectCourseService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
