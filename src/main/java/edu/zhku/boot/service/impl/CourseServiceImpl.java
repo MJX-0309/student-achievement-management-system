@@ -5,12 +5,16 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import edu.zhku.boot.entity.Course;
+import edu.zhku.boot.entity.SelectCourse;
 import edu.zhku.boot.mapper.CollegeMapper;
 import edu.zhku.boot.mapper.CourseTypeMapper;
+import edu.zhku.boot.mapper.SelectCourseMapper;
 import edu.zhku.boot.service.CourseService;
 import edu.zhku.boot.mapper.CourseMapper;
+import edu.zhku.boot.service.SelectCourseService;
 import edu.zhku.boot.vo.CourseInfoVo;
 import edu.zhku.boot.vo.CourseQueryVo;
+import edu.zhku.boot.vo.CourseRequestVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +36,9 @@ implements CourseService{
 
     @Autowired
     private CourseTypeMapper courseTypeMapper;
+
+    @Autowired
+    private SelectCourseMapper selectCourseMapper;
     @Override
     public CourseInfoVo getCourseById(Long id) {
         Course course = baseMapper.selectById(id);
@@ -70,6 +77,22 @@ implements CourseService{
         voPage.setRecords(list);
 
         return voPage;
+    }
+
+    @Override
+    public void saveCourse(CourseRequestVo course) {
+        Course targetCourse = new Course();
+        BeanUtils.copyProperties(course,targetCourse);
+        baseMapper.insert(targetCourse);
+        selectCourseMapper.delete(new QueryWrapper<SelectCourse>().eq("course_id",course.getCourseId()));
+        Long manageTeacherId = course.getManageTeacherId();
+        course.getTeacherIds().forEach(teacher->{
+            SelectCourse selectCourse = new SelectCourse(teacher,course.getCourseId(),0);
+            if (teacher.equals(manageTeacherId)){
+                selectCourse.setIsAuthorized(1);
+            }
+            selectCourseMapper.insert(selectCourse);
+        });
     }
 }
 

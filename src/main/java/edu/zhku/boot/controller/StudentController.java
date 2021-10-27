@@ -53,7 +53,7 @@ public class StudentController {
 
     @ApiOperation("分页查询")
     @GetMapping("page/{current}/{size}")
-    public Result queryPage(@PathVariable Long current, @PathVariable Long size, @RequestBody StudentQueryVo queryVo){
+    public Result queryPage(@PathVariable Long current, @PathVariable Long size, StudentQueryVo queryVo){
         IPage<StudentInfoVo> page=studentService.getStudentInfoVoPage(current,size,queryVo);
         return Result.success(page);
     }

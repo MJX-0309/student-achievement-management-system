@@ -4,15 +4,15 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import edu.zhku.boot.common.model.Result;
 import edu.zhku.boot.entity.Course;
 import edu.zhku.boot.entity.CourseType;
-import edu.zhku.boot.entity.Student;
 import edu.zhku.boot.service.CourseService;
 import edu.zhku.boot.service.CourseTypeService;
+import edu.zhku.boot.service.SelectCourseService;
 import edu.zhku.boot.vo.CourseInfoVo;
 import edu.zhku.boot.vo.CourseQueryVo;
+import edu.zhku.boot.vo.CourseRequestVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +31,9 @@ public class CourseController {
     @Autowired
     private CourseTypeService courseTypeService;
 
+    @Autowired
+    private SelectCourseService selectCourseService;
+
     @ApiOperation("通过id获取")
     @GetMapping("/getById/{id}")
     public Result getById(@PathVariable Long id){
@@ -38,17 +41,10 @@ public class CourseController {
         return Result.success(vo);
     }
 
-    @ApiOperation("新增")
-    @PostMapping("/save")
-    public Result save(@RequestBody Course course){
-        courseService.save(course);
-        return Result.success();
-    }
-
-    @ApiOperation("更新")
-    @PutMapping("/update")
-    public Result update(@RequestBody Course course){
-        courseService.updateById(course);
+    @ApiOperation("新增/更新")
+    @PostMapping("/saveOrUpdate")
+    public Result save(@RequestBody CourseRequestVo course){
+        courseService.saveCourse(course);
         return Result.success();
     }
 
@@ -63,7 +59,7 @@ public class CourseController {
     @GetMapping("page/{current}/{size}")
     public Result queryPage(@PathVariable Long current,
                             @PathVariable Long size,
-                            @RequestBody(required = false)CourseQueryVo vo){
+                            CourseQueryVo vo){
         IPage<CourseInfoVo> page=courseService.getCourseInfoVoPage(current,size,vo);
         return Result.success(page);
     }
@@ -71,7 +67,8 @@ public class CourseController {
     @ApiOperation("获取所有课程类型")
     @GetMapping("/getTypeList")
     public Result getTypeList(){
-        List<Course> list = courseService.list();
+        List<CourseType> list = courseTypeService.list();
         return Result.success(list);
     }
+
 }

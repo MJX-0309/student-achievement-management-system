@@ -3,13 +3,11 @@ package edu.zhku.boot.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import edu.zhku.boot.entity.Course;
 import edu.zhku.boot.entity.Major;
-import edu.zhku.boot.entity.MajorQueryVo;
+import edu.zhku.boot.vo.MajorQueryVo;
 import edu.zhku.boot.mapper.CollegeMapper;
 import edu.zhku.boot.service.MajorService;
 import edu.zhku.boot.mapper.MajorMapper;
-import edu.zhku.boot.vo.CourseInfoVo;
 import edu.zhku.boot.vo.MajorInfoVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,13 +40,18 @@ implements MajorService{
         Page<Major> page = new Page<>(current,size);
         Page<MajorInfoVo> voPage = new Page<>();
         QueryWrapper<Major> wrapper = new QueryWrapper<>();
-
+        if (StringUtils.hasText(queryVo.getKeyword())){
+            wrapper.like("major_id",queryVo.getKeyword())
+                    .or()
+                    .like("name",queryVo.getKeyword());
+        }
         baseMapper.selectPage(page,wrapper);
         BeanUtils.copyProperties(page,voPage);
 
         List<MajorInfoVo> list = page.getRecords().stream().map(major -> {
             MajorInfoVo infoVo = new MajorInfoVo();
-            infoVo.setCollege(collegeMapper.getNameById(major.getMajorId()));
+            BeanUtils.copyProperties(major,infoVo);
+            infoVo.setCollege(collegeMapper.getNameById(major.getCollege()));
             return infoVo;
         }).collect(Collectors.toList());
 

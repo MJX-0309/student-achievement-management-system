@@ -3,7 +3,7 @@ package edu.zhku.boot.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import edu.zhku.boot.entity.Major;
 import com.baomidou.mybatisplus.extension.service.IService;
-import edu.zhku.boot.entity.MajorQueryVo;
+import edu.zhku.boot.vo.MajorQueryVo;
 import edu.zhku.boot.vo.MajorInfoVo;
 
 /**

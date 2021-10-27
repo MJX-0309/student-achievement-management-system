@@ -38,11 +38,6 @@ public class Result<T> {
         return success("操作成功");
     }
 
-    public static <T> Result<T> success(String message){
-        return success(message,null);
-    }
-
-
     public static <T> Result<T> success(T data){
         return success("操作成功",data);
     }

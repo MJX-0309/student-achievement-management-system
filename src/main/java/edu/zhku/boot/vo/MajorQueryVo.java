@@ -1,4 +1,4 @@
-package edu.zhku.boot.entity;
+package edu.zhku.boot.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

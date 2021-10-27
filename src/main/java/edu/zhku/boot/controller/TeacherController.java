@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import edu.zhku.boot.common.model.Result;
 import edu.zhku.boot.entity.Teacher;
 import edu.zhku.boot.service.TeacherService;
+import edu.zhku.boot.vo.TeacherGroupVo;
 import edu.zhku.boot.vo.TeacherInfoVo;
 import edu.zhku.boot.vo.TeacherQueryVo;
 import io.swagger.annotations.Api;
@@ -38,19 +39,13 @@ public class TeacherController {
         return Result.success(teacher);
     }
 
-    @ApiOperation("新增")
-    @PostMapping("/save")
+    @ApiOperation("新增/更新")
+    @PostMapping("/saveOrUpdate")
     public Result save(@RequestBody Teacher teacher){
-        teacherService.save(teacher);
+        teacherService.saveOrUpdate(teacher);
         return Result.success();
     }
 
-    @ApiOperation("更新")
-    @PutMapping("/update")
-    public Result update(@RequestBody Teacher teacher){
-        teacherService.updateById(teacher);
-        return Result.success();
-    }
 
     @ApiOperation("删除")
     @DeleteMapping("/delete/{id}")
@@ -63,10 +58,15 @@ public class TeacherController {
     @GetMapping("/page/{current}/{size}")
     public Result queryPage(@PathVariable Long current,
                             @PathVariable Long size,
-                            @RequestBody(required = false) TeacherQueryVo queryVo){
+                             TeacherQueryVo queryVo){
         Page<TeacherInfoVo> voPage = teacherService.getTeacherInfoVoPage(current, size, queryVo);
         return Result.success(voPage);
     }
 
-
+    @ApiOperation("按学院分组")
+    @GetMapping("/group")
+    public Result getGroupByCollege(){
+        List<TeacherGroupVo> vo=teacherService.getGroupByCollege();
+        return Result.success(vo);
+    }
 }

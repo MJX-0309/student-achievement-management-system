@@ -11,12 +11,14 @@
             <result property="type" column="type" jdbcType="TINYINT"/>
             <result property="theoreticalHours" column="theoretical_hours" jdbcType="DECIMAL"/>
             <result property="practicalHours" column="practical_hours" jdbcType="DECIMAL"/>
+            <result property="regularRatio" column="regular_ratio" jdbcType="INTEGER"/>
+            <result property="endtermRatio" column="endterm_ratio" jdbcType="INTEGER"/>
             <result property="credit" column="credit" jdbcType="DECIMAL"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        course_id,name,college_id,
-        type,theoretical_hours,practical_hours,
+        course_id,name,major_id
+        type,theoretical_hours,practical_hours,regular_ratio,endterm_ratio
         credit
     </sql>
 </mapper>

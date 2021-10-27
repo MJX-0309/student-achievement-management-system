@@ -3,10 +3,13 @@ package edu.zhku.boot.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import edu.zhku.boot.entity.College;
 import edu.zhku.boot.entity.Teacher;
 import edu.zhku.boot.mapper.CollegeMapper;
 import edu.zhku.boot.service.TeacherService;
 import edu.zhku.boot.mapper.TeacherMapper;
+import edu.zhku.boot.vo.TeacherGroupInfo;
+import edu.zhku.boot.vo.TeacherGroupVo;
 import edu.zhku.boot.vo.TeacherInfoVo;
 import edu.zhku.boot.vo.TeacherQueryVo;
 import org.springframework.beans.BeanUtils;
@@ -14,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,6 +64,25 @@ implements TeacherService{
         BeanUtils.copyProperties(page,voPage);
         voPage.setRecords(collect);
         return voPage;
+    }
+
+    @Override
+    public List<TeacherGroupVo> getGroupByCollege() {
+        ArrayList<TeacherGroupVo> list = new ArrayList<>();
+        List<College> collegeList = collegeMapper.selectList(null);
+        collegeList.forEach(college -> {
+            TeacherGroupVo groupVo = new TeacherGroupVo();
+            groupVo.setTeacherId(college.getCollegeId());
+            groupVo.setName(college.getName());
+            List<TeacherGroupInfo> teacherGroupInfos = baseMapper.selectList(new QueryWrapper<Teacher>().eq("college_id", college.getCollegeId())).stream().map(teacher -> {
+                TeacherGroupInfo info = new TeacherGroupInfo();
+                BeanUtils.copyProperties(teacher, info);
+                return info;
+            }).collect(Collectors.toList());
+            groupVo.setTeachers(teacherGroupInfos);
+            list.add(groupVo);
+        });
+        return list;
     }
 }
 

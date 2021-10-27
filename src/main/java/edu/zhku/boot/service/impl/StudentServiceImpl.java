@@ -4,8 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import edu.zhku.boot.entity.Major;
 import edu.zhku.boot.entity.Student;
+import edu.zhku.boot.mapper.CollegeMapper;
 import edu.zhku.boot.mapper.MajorMapper;
+import edu.zhku.boot.service.CollegeService;
 import edu.zhku.boot.service.StudentService;
 import edu.zhku.boot.mapper.StudentMapper;
 import edu.zhku.boot.vo.StudentInfoVo;
@@ -29,6 +32,8 @@ implements StudentService{
     @Autowired
     private MajorMapper majorMapper;
 
+    @Autowired
+    private CollegeMapper collegeMapper;
     @Override
     public StudentInfoVo getStudentById(Long id) {
         Student student = baseMapper.selectById(id);
@@ -55,10 +60,12 @@ implements StudentService{
         baseMapper.selectPage(page,wrapper);
         BeanUtils.copyProperties(page,voPage);
         List<StudentInfoVo> list = page.getRecords().stream().map(student -> {
+            Major major = majorMapper.selectById(student.getMajor());
             StudentInfoVo vo = new StudentInfoVo();
             BeanUtils.copyProperties(student, vo);
+            vo.setCollege(collegeMapper.getNameById(major.getCollege()));
             vo.setGender(student.getGender() == 1 ? "男" : "女");
-            vo.setMajor(majorMapper.getNameByiId(student.getMajor()));
+            vo.setMajor(major.getName());
             return vo;
         }).collect(Collectors.toList());
         voPage.setRecords(list);
