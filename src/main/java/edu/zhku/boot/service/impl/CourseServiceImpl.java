@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -72,6 +73,8 @@ implements CourseService{
             BeanUtils.copyProperties(course, infoVo);
             infoVo.setType(courseTypeMapper.getNameById(course.getType()));
             infoVo.setCollege(collegeMapper.getNameById(course.getCourseId()));
+            infoVo.setRegularRatio((int) (course.getRegularRatio().doubleValue()*100));
+            infoVo.setEndtermRatio((int) (course.getEndtermRatio().doubleValue()*100));
             return infoVo;
         }).collect(Collectors.toList());
         voPage.setRecords(list);
@@ -93,6 +96,21 @@ implements CourseService{
             }
             selectCourseMapper.insert(selectCourse);
         });
+    }
+
+    @Override
+    public List<CourseInfoVo> getByTeacherId(Long id) {
+        ArrayList<CourseInfoVo> list = new ArrayList<>();
+        List<SelectCourse> selectCourseList = selectCourseMapper.selectList(new QueryWrapper<SelectCourse>().eq("teacher_id", id));
+        selectCourseList.forEach(selectCourse->{
+            Course course = baseMapper.selectById(selectCourse.getCourseId());
+            CourseInfoVo infoVo = new CourseInfoVo();
+            BeanUtils.copyProperties(course, infoVo);
+            infoVo.setType(courseTypeMapper.getNameById(course.getType()));
+            infoVo.setCollege(collegeMapper.getNameById(course.getCourseId()));
+            list.add(infoVo);
+        });
+        return list;
     }
 }
 

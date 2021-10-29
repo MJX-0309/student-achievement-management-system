@@ -1,5 +1,6 @@
 package edu.zhku.boot.common.exception;
 
+import edu.zhku.boot.common.model.Result;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,7 +13,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
-    public ResponseEntity exceptionHandler(Exception e){
-        return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    public Result exceptionHandler(Exception e){
+        e.printStackTrace();
+        return Result.error(e.getMessage());
     }
 }

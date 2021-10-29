@@ -1,20 +1,16 @@
 package edu.zhku.boot.vo;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.Date;
+import java.math.BigDecimal;
 
 /**
  * @author MJX
- * @date 2021/10/26
+ * @date 2021/10/28
  */
 @Data
-@ApiModel("学生信息Vo")
-public class StudentInfoVo {
-
+public class StudentScoreVo {
     @ApiModelProperty("学号")
     private Long studentId;
 
@@ -30,9 +26,7 @@ public class StudentInfoVo {
     @ApiModelProperty("性别")
     private String gender;
 
-    @ApiModelProperty("生日")
-    private Date birth;
-
-    @ApiModelProperty("备注")
-    private String remark;
+    private BigDecimal regularGrade;
+    private BigDecimal endtermGrade;
+    private BigDecimal score;
 }

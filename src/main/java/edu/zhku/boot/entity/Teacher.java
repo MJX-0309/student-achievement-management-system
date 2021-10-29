@@ -30,7 +30,7 @@ public class Teacher {
     private String name;
 
     @ApiModelProperty("性别")
-    private Byte gender;
+    private Integer gender;
 
     @ApiModelProperty("生日")
     private Date birth;

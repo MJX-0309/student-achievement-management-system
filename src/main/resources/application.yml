@@ -1,8 +1,16 @@
 spring:
   datasource:
+    druid:
+      min-idle: 5
     url: jdbc:mysql://39.108.234.60:3306/student_achievement
     username: root
     password: 1585225345
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd
+  redis:
+    host: 39.108.234.60
+thread:
+  core-size: 20
+  max-size: 200
+  keep-alive-time: 10

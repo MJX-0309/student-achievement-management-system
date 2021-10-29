@@ -20,13 +20,16 @@ public class TeacherInfoVo {
     private Long teacherId;
 
     @ApiModelProperty("学院id")
-    private String college;
+    private String collegeId;
+
+    @ApiModelProperty("学院名")
+    private String collegeName;
 
     @ApiModelProperty("名字")
     private String name;
 
     @ApiModelProperty("性别")
-    private String gender;
+    private Integer gender;
 
     @ApiModelProperty("生日")
     private Date birth;

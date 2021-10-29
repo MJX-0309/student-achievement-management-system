@@ -11,8 +11,8 @@
             <result property="type" column="type" jdbcType="TINYINT"/>
             <result property="theoreticalHours" column="theoretical_hours" jdbcType="DECIMAL"/>
             <result property="practicalHours" column="practical_hours" jdbcType="DECIMAL"/>
-            <result property="regularRatio" column="regular_ratio" jdbcType="INTEGER"/>
-            <result property="endtermRatio" column="endterm_ratio" jdbcType="INTEGER"/>
+            <result property="regularRatio" column="regular_ratio" jdbcType="DECIMAL"/>
+            <result property="endtermRatio" column="endterm_ratio" jdbcType="DECIMAL"/>
             <result property="credit" column="credit" jdbcType="DECIMAL"/>
     </resultMap>
 

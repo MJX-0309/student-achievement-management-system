@@ -1,11 +1,13 @@
 package edu.zhku.boot.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import edu.zhku.boot.common.model.Result;
 import edu.zhku.boot.entity.Course;
 import edu.zhku.boot.entity.CourseType;
 import edu.zhku.boot.service.CourseService;
 import edu.zhku.boot.service.CourseTypeService;
+import edu.zhku.boot.service.ScoreService;
 import edu.zhku.boot.service.SelectCourseService;
 import edu.zhku.boot.vo.CourseInfoVo;
 import edu.zhku.boot.vo.CourseQueryVo;
@@ -34,6 +36,8 @@ public class CourseController {
     @Autowired
     private SelectCourseService selectCourseService;
 
+    @Autowired
+    private ScoreService scoreService;
     @ApiOperation("通过id获取")
     @GetMapping("/getById/{id}")
     public Result getById(@PathVariable Long id){
@@ -71,4 +75,17 @@ public class CourseController {
         return Result.success(list);
     }
 
+    @ApiOperation("获取教师上课的课程")
+    @GetMapping("/getByTeacherId/{id}")
+    public Result getByTeacherId(@PathVariable Long id){
+        List<CourseInfoVo> list=courseService.getByTeacherId(id);
+        return Result.success(list);
+    }
+
+    @ApiOperation("学生退课")
+    @DeleteMapping("/backCourse/{courseId}/{studentId}")
+    public Result backCourse(@PathVariable Long courseId, @PathVariable Long studentId){
+        scoreService.backCourse(courseId,studentId);
+        return Result.success();
+    }
 }

@@ -22,8 +22,9 @@ public class ScoreController {
     @Autowired
     private ScoreService scoreService;
 
-    @ApiOperation("录入成绩")
-    @PostMapping("/save")
+
+    @ApiOperation("录入成绩/修改成绩")
+    @PostMapping("/saveOrUpdate")
     public Result save(@RequestBody Score score){
         scoreService.saveScore(score);
         return Result.success();

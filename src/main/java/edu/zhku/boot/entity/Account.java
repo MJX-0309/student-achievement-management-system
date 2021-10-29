@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -17,6 +18,7 @@ import lombok.Data;
 @TableName(value ="account")
 @Data
 @ApiModel("登录信息")
+@AllArgsConstructor
 public class Account {
 
     @TableId
@@ -26,10 +28,7 @@ public class Account {
     @ApiModelProperty("密码")
     private String password;
 
-    @ApiModelProperty("盐")
-    private String salt;
-
     @ApiModelProperty("角色")
-    private Byte role;
+    private Integer role;
 
 }

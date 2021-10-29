@@ -69,6 +69,13 @@ public class ScoreServiceImpl extends ServiceImpl<ScoreMapper, Score>
         return list;
     }
 
+    @Override
+    public void backCourse(Long courseId, Long studentId) {
+        baseMapper.delete(new QueryWrapper<Score>().eq("course_id",courseId).and(wrapper->{
+            wrapper.eq("student_Id",studentId);
+        }));
+    }
+
 
     private void calculateScore(Score score, BigDecimal regularRatio, BigDecimal endtermRatio) {
         BigDecimal regular = score.getRegularGrade().multiply(regularRatio);

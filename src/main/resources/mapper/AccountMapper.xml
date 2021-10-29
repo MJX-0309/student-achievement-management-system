@@ -7,12 +7,11 @@
     <resultMap id="BaseResultMap" type="edu.zhku.boot.entity.Account">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="password" column="password" jdbcType="VARCHAR"/>
-            <result property="salt" column="salt" jdbcType="VARCHAR"/>
             <result property="role" column="role" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,password,salt,
+        id,password,
         role
     </sql>
 

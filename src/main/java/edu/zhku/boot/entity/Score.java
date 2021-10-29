@@ -24,7 +24,6 @@ public class Score{
     @ApiModelProperty("课程id")
     private Long courseId;
 
-
     @ApiModelProperty("学生id")
     private Long studentId;
 

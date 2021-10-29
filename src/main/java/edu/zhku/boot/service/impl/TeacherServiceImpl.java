@@ -35,8 +35,7 @@ implements TeacherService{
         Teacher teacher = baseMapper.selectById(id);
         TeacherInfoVo vo = new TeacherInfoVo();
         BeanUtils.copyProperties(teacher,vo);
-        vo.setCollege(collegeMapper.getNameById(teacher.getTeacherId()));
-        vo.setGender(teacher.getGender()==1?"男":"女");
+        vo.setCollegeName(collegeMapper.getNameById(teacher.getTeacherId()));
         return vo;
     }
 
@@ -56,8 +55,7 @@ implements TeacherService{
         List<TeacherInfoVo> collect = baseMapper.selectPage(page, wrapper).getRecords().stream().map(teacher -> {
             TeacherInfoVo vo = new TeacherInfoVo();
             BeanUtils.copyProperties(teacher,vo);
-            vo.setCollege(collegeMapper.getNameById(teacher.getCollegeId()));
-            vo.setGender(teacher.getGender()==1?"男":"女");
+            vo.setCollegeName(collegeMapper.getNameById(teacher.getCollegeId()));
             return vo;
         }).collect(Collectors.toList());
 

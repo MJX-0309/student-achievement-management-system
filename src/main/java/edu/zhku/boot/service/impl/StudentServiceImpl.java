@@ -5,19 +5,22 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import edu.zhku.boot.entity.Major;
+import edu.zhku.boot.entity.Score;
 import edu.zhku.boot.entity.Student;
 import edu.zhku.boot.mapper.CollegeMapper;
 import edu.zhku.boot.mapper.MajorMapper;
-import edu.zhku.boot.service.CollegeService;
+import edu.zhku.boot.mapper.ScoreMapper;
 import edu.zhku.boot.service.StudentService;
 import edu.zhku.boot.mapper.StudentMapper;
 import edu.zhku.boot.vo.StudentInfoVo;
 import edu.zhku.boot.vo.StudentQueryVo;
+import edu.zhku.boot.vo.StudentScoreVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,6 +37,9 @@ implements StudentService{
 
     @Autowired
     private CollegeMapper collegeMapper;
+
+    @Autowired
+    private ScoreMapper scoreMapper;
     @Override
     public StudentInfoVo getStudentById(Long id) {
         Student student = baseMapper.selectById(id);
@@ -70,6 +76,22 @@ implements StudentService{
         }).collect(Collectors.toList());
         voPage.setRecords(list);
         return voPage;
+    }
+
+    @Override
+    public List<StudentScoreVo> getByCourse(Long id) {
+        ArrayList<StudentScoreVo> list = new ArrayList<>();
+        List<Score> scoreList = scoreMapper.selectList(new QueryWrapper<Score>().eq("course_id", id));
+        scoreList.forEach(score -> {
+            StudentScoreVo scoreVo = new StudentScoreVo();
+            Student student = baseMapper.selectById(id);
+            BeanUtils.copyProperties(student,scoreVo);
+            scoreVo.setMajor(majorMapper.getNameByiId(student.getMajor()));
+            scoreVo.setGender(student.getGender()==1?"男":"女");
+            BeanUtils.copyProperties(score,scoreVo);
+            list.add(scoreVo);
+        });
+        return list;
     }
 }
 

@@ -6,10 +6,13 @@ import edu.zhku.boot.entity.Student;
 import edu.zhku.boot.service.StudentService;
 import edu.zhku.boot.vo.StudentInfoVo;
 import edu.zhku.boot.vo.StudentQueryVo;
+import edu.zhku.boot.vo.StudentScoreVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author MJX
@@ -56,5 +59,12 @@ public class StudentController {
     public Result queryPage(@PathVariable Long current, @PathVariable Long size, StudentQueryVo queryVo){
         IPage<StudentInfoVo> page=studentService.getStudentInfoVoPage(current,size,queryVo);
         return Result.success(page);
+    }
+
+    @ApiOperation("获取课程的学生")
+    @GetMapping("/getByCourse/{id}")
+    public Result getByCourse(@PathVariable Long id){
+        List<StudentScoreVo> list=studentService.getByCourse(id);
+        return Result.success(list);
     }
 }

@@ -7,6 +7,8 @@ import edu.zhku.boot.vo.CourseInfoVo;
 import edu.zhku.boot.vo.CourseQueryVo;
 import edu.zhku.boot.vo.CourseRequestVo;
 
+import java.util.List;
+
 /**
  *
  * @author MJX
@@ -18,4 +20,6 @@ public interface CourseService extends IService<Course> {
     IPage<CourseInfoVo> getCourseInfoVoPage(Long current, Long size, CourseQueryVo vo);
 
     void saveCourse(CourseRequestVo course);
+
+    List<CourseInfoVo> getByTeacherId(Long id);
 }

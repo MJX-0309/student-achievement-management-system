@@ -18,4 +18,6 @@ public interface ScoreService extends IService<Score> {
     void reset(Long courseId, Long studentId);
 
     List<CourseStatistVo> statist(Long courseId);
+
+    void backCourse(Long courseId, Long studentId);
 }
