@@ -45,8 +45,7 @@ implements StudentService{
         Student student = baseMapper.selectById(id);
         StudentInfoVo infoVo = new StudentInfoVo();
         BeanUtils.copyProperties(student,infoVo);
-        infoVo.setMajor(majorMapper.getNameByiId(student.getMajor()));
-        infoVo.setGender(student.getGender()==1?"男":"女");
+        infoVo.setMajor(majorMapper.getNameByiId(student.getMajorId()));
         return infoVo;
     }
 
@@ -66,11 +65,10 @@ implements StudentService{
         baseMapper.selectPage(page,wrapper);
         BeanUtils.copyProperties(page,voPage);
         List<StudentInfoVo> list = page.getRecords().stream().map(student -> {
-            Major major = majorMapper.selectById(student.getMajor());
+            Major major = majorMapper.selectById(student.getMajorId());
             StudentInfoVo vo = new StudentInfoVo();
             BeanUtils.copyProperties(student, vo);
-            vo.setCollege(collegeMapper.getNameById(major.getCollege()));
-            vo.setGender(student.getGender() == 1 ? "男" : "女");
+            vo.setCollege(collegeMapper.getNameById(major.getCollegeId()));
             vo.setMajor(major.getName());
             return vo;
         }).collect(Collectors.toList());
@@ -86,8 +84,7 @@ implements StudentService{
             StudentScoreVo scoreVo = new StudentScoreVo();
             Student student = baseMapper.selectById(id);
             BeanUtils.copyProperties(student,scoreVo);
-            scoreVo.setMajor(majorMapper.getNameByiId(student.getMajor()));
-            scoreVo.setGender(student.getGender()==1?"男":"女");
+            scoreVo.setMajor(majorMapper.getNameByiId(student.getMajorId()));
             BeanUtils.copyProperties(score,scoreVo);
             list.add(scoreVo);
         });

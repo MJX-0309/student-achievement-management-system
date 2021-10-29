@@ -21,5 +21,8 @@ public class MajorInfoVo {
     private String name;
 
     @ApiModelProperty("所属学院")
-    private String college;
+    private Long collegeId;
+
+    @ApiModelProperty("所属学院")
+    private String collegeName;
 }

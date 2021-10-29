@@ -17,7 +17,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        course_id,name,major_id
+        course_id,name,collegeId
         type,theoretical_hours,practical_hours,regular_ratio,endterm_ratio
         credit
     </sql>

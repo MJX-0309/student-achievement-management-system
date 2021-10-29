@@ -1,13 +1,10 @@
 package edu.zhku.boot.service.impl;
 
-import cn.hutool.crypto.digest.BCrypt;
-import cn.hutool.jwt.JWTUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import edu.zhku.boot.common.constant.RedisConstant;
 import edu.zhku.boot.entity.Account;
-import edu.zhku.boot.service.AccountService;
 import edu.zhku.boot.mapper.AccountMapper;
-import edu.zhku.boot.service.TokenService;
+import edu.zhku.boot.service.AccountService;
 import edu.zhku.boot.util.JWTUtils;
 import edu.zhku.boot.util.RedisUtils;
 import edu.zhku.boot.vo.LoginVo;
@@ -40,7 +37,7 @@ implements AccountService{
             }
             boolean matches = encoder.matches(loginVo.getPassword(), select.getPassword());
             if (matches) {
-                return JWTUtils.createToken(loginVo.getTeacherId());
+                return JWTUtils.createToken(Long.parseLong(loginVo.getTeacherId()));
             }else {
                 throw new RuntimeException("密码不正确");
             }

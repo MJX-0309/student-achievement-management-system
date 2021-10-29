@@ -6,20 +6,17 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import edu.zhku.boot.entity.Course;
 import edu.zhku.boot.entity.SelectCourse;
-import edu.zhku.boot.mapper.CollegeMapper;
-import edu.zhku.boot.mapper.CourseTypeMapper;
-import edu.zhku.boot.mapper.SelectCourseMapper;
+import edu.zhku.boot.entity.Teacher;
+import edu.zhku.boot.mapper.*;
 import edu.zhku.boot.service.CourseService;
-import edu.zhku.boot.mapper.CourseMapper;
-import edu.zhku.boot.service.SelectCourseService;
 import edu.zhku.boot.vo.CourseInfoVo;
 import edu.zhku.boot.vo.CourseQueryVo;
-import edu.zhku.boot.vo.CourseRequestVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,13 +37,28 @@ implements CourseService{
 
     @Autowired
     private SelectCourseMapper selectCourseMapper;
+
+    @Autowired
+    private TeacherMapper teacherMapper;
+
     @Override
     public CourseInfoVo getCourseById(Long id) {
         Course course = baseMapper.selectById(id);
         CourseInfoVo vo = new CourseInfoVo();
         BeanUtils.copyProperties(course,vo);
-        vo.setCollege(collegeMapper.getNameById(course.getCollegeId()));
+        vo.setCollegeName(collegeMapper.getNameById(course.getCollegeId()));
         vo.setType(courseTypeMapper.getNameById(course.getType()));
+        Long manageTeacherId = selectCourseMapper.getManageTeacherIdByCourseId(course.getCourseId());
+        vo.setManagerTeacher(teacherMapper.selectById(manageTeacherId));
+        List<SelectCourse> selectCourseList = selectCourseMapper.selectList(new QueryWrapper<SelectCourse>().eq("course_id", course.getCourseId()));
+        ArrayList<Teacher> teachers = new ArrayList<>();
+        selectCourseList.forEach(selectCourse -> {
+            Teacher teacher = teacherMapper.selectById(selectCourse.getTeacherId());
+            teachers.add(teacher);
+        });
+        vo.setTeachers(teachers);
+        vo.setRegularRatio((int) (course.getRegularRatio().doubleValue()*100));
+        vo.setEndtermRatio((int) (course.getEndtermRatio().doubleValue()*100));
         return vo;
     }
 
@@ -72,7 +84,16 @@ implements CourseService{
             CourseInfoVo infoVo = new CourseInfoVo();
             BeanUtils.copyProperties(course, infoVo);
             infoVo.setType(courseTypeMapper.getNameById(course.getType()));
-            infoVo.setCollege(collegeMapper.getNameById(course.getCourseId()));
+            infoVo.setCollegeName(collegeMapper.getNameById(course.getCourseId()));
+            Long manageTeacherId = selectCourseMapper.getManageTeacherIdByCourseId(course.getCourseId());
+            infoVo.setManagerTeacher(teacherMapper.selectById(manageTeacherId));
+            List<SelectCourse> selectCourseList = selectCourseMapper.selectList(new QueryWrapper<SelectCourse>().eq("course_id", course.getCourseId()));
+            ArrayList<Teacher> teachers = new ArrayList<>();
+            selectCourseList.forEach(selectCourse -> {
+                Teacher teacher = teacherMapper.selectById(selectCourse.getTeacherId());
+                teachers.add(teacher);
+            });
+            infoVo.setTeachers(teachers);
             infoVo.setRegularRatio((int) (course.getRegularRatio().doubleValue()*100));
             infoVo.setEndtermRatio((int) (course.getEndtermRatio().doubleValue()*100));
             return infoVo;
@@ -83,15 +104,17 @@ implements CourseService{
     }
 
     @Override
-    public void saveCourse(CourseRequestVo course) {
+    public void saveCourse(CourseInfoVo course) {
         Course targetCourse = new Course();
         BeanUtils.copyProperties(course,targetCourse);
-        baseMapper.insert(targetCourse);
+        targetCourse.setRegularRatio(new BigDecimal(course.getRegularRatio()).divide(new BigDecimal("100")));
+        targetCourse.setEndtermRatio(new BigDecimal(course.getEndtermRatio()).divide(new BigDecimal("100")));
+        this.saveOrUpdate(targetCourse);
         selectCourseMapper.delete(new QueryWrapper<SelectCourse>().eq("course_id",course.getCourseId()));
-        Long manageTeacherId = course.getManageTeacherId();
-        course.getTeacherIds().forEach(teacher->{
-            SelectCourse selectCourse = new SelectCourse(teacher,course.getCourseId(),0);
-            if (teacher.equals(manageTeacherId)){
+        Teacher managerTeacher = course.getManagerTeacher();
+        course.getTeachers().forEach(teacher->{
+            SelectCourse selectCourse = new SelectCourse(teacher.getTeacherId(),course.getCourseId(),0);
+            if (teacher.equals(managerTeacher)){
                 selectCourse.setIsAuthorized(1);
             }
             selectCourseMapper.insert(selectCourse);
@@ -102,13 +125,24 @@ implements CourseService{
     public List<CourseInfoVo> getByTeacherId(Long id) {
         ArrayList<CourseInfoVo> list = new ArrayList<>();
         List<SelectCourse> selectCourseList = selectCourseMapper.selectList(new QueryWrapper<SelectCourse>().eq("teacher_id", id));
-        selectCourseList.forEach(selectCourse->{
+        selectCourseList.forEach(selectCourse -> {
             Course course = baseMapper.selectById(selectCourse.getCourseId());
-            CourseInfoVo infoVo = new CourseInfoVo();
-            BeanUtils.copyProperties(course, infoVo);
-            infoVo.setType(courseTypeMapper.getNameById(course.getType()));
-            infoVo.setCollege(collegeMapper.getNameById(course.getCourseId()));
-            list.add(infoVo);
+            CourseInfoVo courseInfoVo = new CourseInfoVo();
+            BeanUtils.copyProperties(course,courseInfoVo);
+            Teacher managerTeacher = teacherMapper.selectById(selectCourse.getTeacherId());
+            courseInfoVo.setManagerTeacher(managerTeacher);
+            courseInfoVo.setCollegeName(collegeMapper.getNameById(course.getCourseId()));
+            courseInfoVo.setType(courseTypeMapper.getNameById(course.getType()));
+            List<SelectCourse> selectCourseList2 = selectCourseMapper.selectList(new QueryWrapper<SelectCourse>().eq("course_id", course.getCourseId()));
+            ArrayList<Teacher> teachers = new ArrayList<>();
+            selectCourseList2.forEach(selectCourse2 -> {
+                Teacher teacher = teacherMapper.selectById(selectCourse2.getTeacherId());
+                teachers.add(teacher);
+            });
+            courseInfoVo.setTeachers(teachers);
+            courseInfoVo.setRegularRatio((int) (course.getRegularRatio().doubleValue()*100));
+            courseInfoVo.setEndtermRatio((int) (course.getEndtermRatio().doubleValue()*100));
+            list.add(courseInfoVo);
         });
         return list;
     }

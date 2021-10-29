@@ -1,9 +1,7 @@
 package edu.zhku.boot.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import edu.zhku.boot.common.model.Result;
-import edu.zhku.boot.entity.Course;
 import edu.zhku.boot.entity.CourseType;
 import edu.zhku.boot.service.CourseService;
 import edu.zhku.boot.service.CourseTypeService;
@@ -11,7 +9,6 @@ import edu.zhku.boot.service.ScoreService;
 import edu.zhku.boot.service.SelectCourseService;
 import edu.zhku.boot.vo.CourseInfoVo;
 import edu.zhku.boot.vo.CourseQueryVo;
-import edu.zhku.boot.vo.CourseRequestVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +44,7 @@ public class CourseController {
 
     @ApiOperation("新增/更新")
     @PostMapping("/saveOrUpdate")
-    public Result save(@RequestBody CourseRequestVo course){
+    public Result save(@RequestBody CourseInfoVo course){
         courseService.saveCourse(course);
         return Result.success();
     }

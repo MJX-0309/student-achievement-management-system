@@ -3,7 +3,10 @@ package edu.zhku.boot.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import edu.zhku.boot.entity.College;
 import edu.zhku.boot.entity.Major;
+import edu.zhku.boot.vo.MajorCascadeInfoVo;
+import edu.zhku.boot.vo.MajorCascadeVo;
 import edu.zhku.boot.vo.MajorQueryVo;
 import edu.zhku.boot.mapper.CollegeMapper;
 import edu.zhku.boot.service.MajorService;
@@ -14,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,7 +35,8 @@ implements MajorService{
         Major major = baseMapper.selectById(id);
         MajorInfoVo infoVo = new MajorInfoVo();
         BeanUtils.copyProperties(major,infoVo);
-        infoVo.setCollege(collegeMapper.getNameById(id));
+        infoVo.setCollegeName(collegeMapper.getNameById(major.getCollegeId()));
+        infoVo.setCollegeId(major.getCollegeId());
         return infoVo;
     }
 
@@ -51,12 +56,35 @@ implements MajorService{
         List<MajorInfoVo> list = page.getRecords().stream().map(major -> {
             MajorInfoVo infoVo = new MajorInfoVo();
             BeanUtils.copyProperties(major,infoVo);
-            infoVo.setCollege(collegeMapper.getNameById(major.getCollege()));
+            infoVo.setCollegeName(collegeMapper.getNameById(major.getCollegeId()));
+            infoVo.setCollegeId(major.getCollegeId());
             return infoVo;
         }).collect(Collectors.toList());
 
         voPage.setRecords(list);
         return voPage;
+    }
+
+    @Override
+    public List<MajorCascadeVo> getCascade() {
+        ArrayList<MajorCascadeVo> list = new ArrayList<>();
+
+        List<College> colleges = collegeMapper.selectList(null);
+        colleges.forEach(college -> {
+            MajorCascadeVo cascadeVo = new MajorCascadeVo();
+            cascadeVo.setName(college.getName());
+            cascadeVo.setValue(college.getCollegeId());
+            List<Major> majors = baseMapper.selectList(new QueryWrapper<Major>().eq("college_id", college.getCollegeId()));
+            List<MajorCascadeInfoVo> collect = majors.stream().map(major -> {
+                MajorCascadeInfoVo infoVo = new MajorCascadeInfoVo();
+                infoVo.setValue(major.getMajorId());
+                infoVo.setName(major.getName());
+                return infoVo;
+            }).collect(Collectors.toList());
+            cascadeVo.setChildren(collect);
+            list.add(cascadeVo);
+        });
+        return list;
     }
 }
 

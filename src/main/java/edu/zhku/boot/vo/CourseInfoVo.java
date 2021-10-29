@@ -1,11 +1,13 @@
 package edu.zhku.boot.vo;
 
 import com.baomidou.mybatisplus.annotation.TableId;
+import edu.zhku.boot.entity.Teacher;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author MJX
@@ -22,7 +24,10 @@ public class CourseInfoVo {
     private String name;
 
     @ApiModelProperty("开设学院")
-    private String college;
+    private Long collegeId;
+
+    @ApiModelProperty("开设学院名字")
+    private String collegeName;
 
     @ApiModelProperty("课程类型")
     private String type;
@@ -38,6 +43,12 @@ public class CourseInfoVo {
 
     @ApiModelProperty("期末比例")
     private Integer endtermRatio;
+
+    @ApiModelProperty("管理教师信息")
+    private Teacher managerTeacher;
+
+    @ApiModelProperty
+    private List<Teacher> teachers;
 
     @ApiModelProperty("学分")
     private BigDecimal credit;

@@ -11,7 +11,7 @@ public class LoginVo {
     /**
      * 用户名
      */
-    private Long teacherId;
+    private String teacherId;
 
     /**
      * 用户密码

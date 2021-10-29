@@ -28,10 +28,10 @@ public class Student {
     private String name;
 
     @ApiModelProperty("专业")
-    private Long major;
+    private Long majorId;
 
     @ApiModelProperty("性别")
-    private Byte gender;
+    private Integer gender;
 
     @ApiModelProperty("生日")
     private Date birth;

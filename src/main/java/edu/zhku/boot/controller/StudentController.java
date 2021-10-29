@@ -28,43 +28,36 @@ public class StudentController {
 
     @ApiOperation("通过id获取")
     @GetMapping("/getById/{id}")
-    public Result getById(@PathVariable Long id){
-        StudentInfoVo studentInfoVo= studentService.getStudentById(id);
+    public Result getById(@PathVariable Long id) {
+        StudentInfoVo studentInfoVo = studentService.getStudentById(id);
         return Result.success(studentInfoVo);
     }
 
     @ApiOperation("新增")
-    @PostMapping("/save")
-    public Result save(@RequestBody Student student){
-        studentService.save(student);
-        return Result.success();
-    }
-
-    @ApiOperation("更新")
-    @PutMapping("/update")
-    public Result update(@RequestBody Student student){
-        studentService.updateById(student);
+    @PostMapping("/saveOrUpdate")
+    public Result save(@RequestBody Student student) {
+        studentService.saveOrUpdate(student);
         return Result.success();
     }
 
     @ApiOperation("删除")
     @DeleteMapping("/delete/{id}")
-    public Result delete(@PathVariable Long id){
+    public Result delete(@PathVariable Long id) {
         studentService.removeById(id);
         return Result.success();
     }
 
     @ApiOperation("分页查询")
     @GetMapping("page/{current}/{size}")
-    public Result queryPage(@PathVariable Long current, @PathVariable Long size, StudentQueryVo queryVo){
-        IPage<StudentInfoVo> page=studentService.getStudentInfoVoPage(current,size,queryVo);
+    public Result queryPage(@PathVariable Long current, @PathVariable Long size, StudentQueryVo queryVo) {
+        IPage<StudentInfoVo> page = studentService.getStudentInfoVoPage(current, size, queryVo);
         return Result.success(page);
     }
 
     @ApiOperation("获取课程的学生")
     @GetMapping("/getByCourse/{id}")
-    public Result getByCourse(@PathVariable Long id){
-        List<StudentScoreVo> list=studentService.getByCourse(id);
+    public Result getByCourse(@PathVariable Long id) {
+        List<StudentScoreVo> list = studentService.getByCourse(id);
         return Result.success(list);
     }
 }

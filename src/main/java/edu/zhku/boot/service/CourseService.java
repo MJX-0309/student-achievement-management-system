@@ -1,11 +1,10 @@
 package edu.zhku.boot.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import edu.zhku.boot.entity.Course;
 import com.baomidou.mybatisplus.extension.service.IService;
+import edu.zhku.boot.entity.Course;
 import edu.zhku.boot.vo.CourseInfoVo;
 import edu.zhku.boot.vo.CourseQueryVo;
-import edu.zhku.boot.vo.CourseRequestVo;
 
 import java.util.List;
 
@@ -19,7 +18,7 @@ public interface CourseService extends IService<Course> {
 
     IPage<CourseInfoVo> getCourseInfoVoPage(Long current, Long size, CourseQueryVo vo);
 
-    void saveCourse(CourseRequestVo course);
+    void saveCourse(CourseInfoVo course);
 
     List<CourseInfoVo> getByTeacherId(Long id);
 }

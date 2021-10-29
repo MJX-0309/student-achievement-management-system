@@ -28,7 +28,7 @@ public class StudentInfoVo {
     private String major;
 
     @ApiModelProperty("性别")
-    private String gender;
+    private Integer gender;
 
     @ApiModelProperty("生日")
     private Date birth;

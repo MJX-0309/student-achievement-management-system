@@ -7,11 +7,11 @@
     <resultMap id="BaseResultMap" type="edu.zhku.boot.entity.Major">
             <id property="majorId" column="major_id" jdbcType="BIGINT"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
-            <result property="college" column="college" jdbcType="BIGINT"/>
+            <result property="collegeId" column="college_id" jdbcType="BIGINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        major_id,name,college
+        major_id,name,college_id
     </sql>
     <select id="getNameByiId" resultType="java.lang.String">
         SELECT name FROM student_achievement.major WHERE major_id=#{id}

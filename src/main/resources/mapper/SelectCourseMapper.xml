@@ -13,4 +13,9 @@
     <sql id="Base_Column_List">
         teacher_id,course_id,is_authorized
     </sql>
+    <select id="getManageTeacherIdByCourseId" resultType="java.lang.Long">
+        SELECT teacher_id
+        FROM student_achievement.select_course
+        WHERE course_id=${courseId} AND is_authorized=1
+    </select>
 </mapper>

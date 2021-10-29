@@ -7,7 +7,7 @@
     <resultMap id="BaseResultMap" type="edu.zhku.boot.entity.Student">
             <id property="studentId" column="student_id" jdbcType="BIGINT"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
-            <result property="major" column="major" jdbcType="BIGINT"/>
+            <result property="majorId" column="major_id" jdbcType="BIGINT"/>
             <result property="gender" column="gender" jdbcType="TINYINT"/>
             <result property="birth" column="birth" jdbcType="TIMESTAMP"/>
             <result property="remark" column="remark" jdbcType="VARCHAR"/>
