@@ -6,14 +6,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import edu.zhku.boot.entity.Course;
 import edu.zhku.boot.entity.Score;
 import edu.zhku.boot.mapper.CourseMapper;
-import edu.zhku.boot.service.ScoreService;
 import edu.zhku.boot.mapper.ScoreMapper;
+import edu.zhku.boot.service.ScoreService;
 import edu.zhku.boot.vo.CourseStatistVo;
-import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.annotation.ElementType;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,17 +30,12 @@ public class ScoreServiceImpl extends ServiceImpl<ScoreMapper, Score>
     public void saveScore(Score score) {
         Course course = courseMapper.selectById(score.getCourseId());
         calculateScore(score, course.getRegularRatio(), course.getEndtermRatio());
-        baseMapper.insert(score);
-    }
-
-    @Override
-    public void updateScore(Score score) {
-        Course course = courseMapper.selectById(score.getCourseId());
-        calculateScore(score, course.getRegularRatio(), course.getEndtermRatio());
-        baseMapper.update(score, new UpdateWrapper<Score>()
+        this.saveOrUpdate(score, new UpdateWrapper<Score>()
                 .eq("course_id", score.getCourseId())
                 .and(wrapper -> wrapper.eq("student_id", score.getStudentId())));
+
     }
+
 
     @Override
     public void reset(Long courseId, Long studentId) {
@@ -75,6 +68,8 @@ public class ScoreServiceImpl extends ServiceImpl<ScoreMapper, Score>
             wrapper.eq("student_Id",studentId);
         }));
     }
+
+
 
 
     private void calculateScore(Score score, BigDecimal regularRatio, BigDecimal endtermRatio) {

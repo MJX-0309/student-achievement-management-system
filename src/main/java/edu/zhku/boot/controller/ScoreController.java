@@ -8,8 +8,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.ResultSet;
-
 /**
  * @author MJX
  * @date 2021/10/26
@@ -27,13 +25,6 @@ public class ScoreController {
     @PostMapping("/saveOrUpdate")
     public Result save(@RequestBody Score score){
         scoreService.saveScore(score);
-        return Result.success();
-    }
-
-    @ApiOperation("修改成绩")
-    @PostMapping("/update")
-    public Result update(@RequestBody Score score){
-        scoreService.updateScore(score);
         return Result.success();
     }
 

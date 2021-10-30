@@ -1,14 +1,17 @@
 package edu.zhku.boot.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import edu.zhku.boot.entity.Course;
+import edu.zhku.boot.entity.Score;
 import edu.zhku.boot.entity.SelectCourse;
 import edu.zhku.boot.entity.Teacher;
 import edu.zhku.boot.mapper.*;
 import edu.zhku.boot.service.CourseService;
+import edu.zhku.boot.service.ScoreService;
 import edu.zhku.boot.vo.CourseInfoVo;
 import edu.zhku.boot.vo.CourseQueryVo;
 import org.springframework.beans.BeanUtils;
@@ -20,6 +23,7 @@ import org.springframework.util.StringUtils;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -42,6 +46,11 @@ implements CourseService{
     @Autowired
     private TeacherMapper teacherMapper;
 
+    @Autowired
+    private ScoreMapper scoreMapper;
+
+    @Autowired
+    private ScoreService scoreService;
     @Override
     public CourseInfoVo getCourseById(Long id) {
         Course course = baseMapper.selectById(id);
@@ -113,6 +122,21 @@ implements CourseService{
         BeanUtils.copyProperties(course,targetCourse);
         targetCourse.setRegularRatio(new BigDecimal(course.getRegularRatio()).divide(new BigDecimal("100")));
         targetCourse.setEndtermRatio(new BigDecimal(course.getEndtermRatio()).divide(new BigDecimal("100")));
+        Course oldCourse = baseMapper.selectById(course.getCourseId());
+        //修改了成绩比例
+        if (oldCourse!=null&&(!oldCourse.getRegularRatio().equals(targetCourse.getRegularRatio()))){
+            CompletableFuture.runAsync(()->{
+                List<Score> scores = scoreMapper.selectList(new QueryWrapper<Score>().eq("course_id", oldCourse.getCourseId()));
+                for (Score score : scores) {
+                    BigDecimal regular = score.getRegularGrade().multiply(targetCourse.getRegularRatio());
+                    BigDecimal endterm = score.getEndtermGrade().multiply(targetCourse.getEndtermRatio());
+                    score.setScore(regular.add(endterm));
+                    scoreMapper.update(score,
+                            new UpdateWrapper<Score>().eq("student_id",score.getStudentId())
+                            .and(wrapper->{wrapper.eq("course_id",score.getCourseId());}));
+             }
+            });
+        }
         this.saveOrUpdate(targetCourse);
         selectCourseMapper.delete(new QueryWrapper<SelectCourse>().eq("course_id",course.getCourseId()));
         Teacher managerTeacher = course.getManagerTeacher();
