@@ -30,7 +30,10 @@ public class CourseInfoVo {
     private String collegeName;
 
     @ApiModelProperty("课程类型")
-    private String type;
+    private Integer typeId;
+
+    @ApiModelProperty("课程类型")
+    private String typeName;
 
     @ApiModelProperty("理论学时")
     private Integer theoreticalHours;

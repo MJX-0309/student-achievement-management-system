@@ -8,7 +8,7 @@
             <id property="courseId" column="course_id" jdbcType="BIGINT"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
             <result property="collegeId" column="college_id" jdbcType="BIGINT"/>
-            <result property="type" column="type" jdbcType="TINYINT"/>
+            <result property="typeId" column="type_id" jdbcType="TINYINT"/>
             <result property="theoreticalHours" column="theoretical_hours" jdbcType="DECIMAL"/>
             <result property="practicalHours" column="practical_hours" jdbcType="DECIMAL"/>
             <result property="regularRatio" column="regular_ratio" jdbcType="DECIMAL"/>
@@ -18,7 +18,7 @@
 
     <sql id="Base_Column_List">
         course_id,name,collegeId
-        type,theoretical_hours,practical_hours,regular_ratio,endterm_ratio
+        type_id,theoretical_hours,practical_hours,regular_ratio,endterm_ratio
         credit
     </sql>
 </mapper>

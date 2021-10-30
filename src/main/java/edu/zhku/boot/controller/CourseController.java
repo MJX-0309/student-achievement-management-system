@@ -1,8 +1,11 @@
 package edu.zhku.boot.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import edu.zhku.boot.common.model.Result;
 import edu.zhku.boot.entity.CourseType;
+import edu.zhku.boot.entity.Score;
+import edu.zhku.boot.entity.SelectCourse;
 import edu.zhku.boot.service.CourseService;
 import edu.zhku.boot.service.CourseTypeService;
 import edu.zhku.boot.service.ScoreService;
@@ -35,6 +38,8 @@ public class CourseController {
 
     @Autowired
     private ScoreService scoreService;
+
+
     @ApiOperation("通过id获取")
     @GetMapping("/getById/{id}")
     public Result getById(@PathVariable Long id){
@@ -52,6 +57,8 @@ public class CourseController {
     @ApiOperation("删除")
     @DeleteMapping("/delete/{id}")
     public Result delete(@PathVariable Long id){
+        scoreService.remove(new QueryWrapper<Score>().eq("course_id",id));
+        selectCourseService.remove(new QueryWrapper<SelectCourse>().eq("course_id",id));
         courseService.removeById(id);
         return Result.success();
     }

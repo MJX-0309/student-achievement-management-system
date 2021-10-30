@@ -82,9 +82,11 @@ implements StudentService{
         List<Score> scoreList = scoreMapper.selectList(new QueryWrapper<Score>().eq("course_id", id));
         scoreList.forEach(score -> {
             StudentScoreVo scoreVo = new StudentScoreVo();
-            Student student = baseMapper.selectById(id);
+            Student student = baseMapper.selectById(score.getStudentId());
             BeanUtils.copyProperties(student,scoreVo);
             scoreVo.setMajor(majorMapper.getNameByiId(student.getMajorId()));
+            scoreVo.setCollege(collegeMapper.getNameById(score.getCourseId()));
+
             BeanUtils.copyProperties(score,scoreVo);
             list.add(scoreVo);
         });

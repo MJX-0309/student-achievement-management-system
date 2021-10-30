@@ -1,14 +1,11 @@
 package edu.zhku.boot.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
-import java.math.BigDecimal;
-
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+
+import java.math.BigDecimal;
 
 /**
  *
@@ -29,7 +26,7 @@ public class Course {
     private Long collegeId;
 
     @ApiModelProperty("课程类型")
-    private Integer type;
+    private Integer typeId;
 
     @ApiModelProperty("理论学时")
     private Integer theoreticalHours;

@@ -14,6 +14,7 @@ import edu.zhku.boot.vo.CourseQueryVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
@@ -47,7 +48,8 @@ implements CourseService{
         CourseInfoVo vo = new CourseInfoVo();
         BeanUtils.copyProperties(course,vo);
         vo.setCollegeName(collegeMapper.getNameById(course.getCollegeId()));
-        vo.setType(courseTypeMapper.getNameById(course.getType()));
+        vo.setTypeName(courseTypeMapper.getNameById(course.getTypeId()));
+        vo.setTypeId(course.getTypeId());
         Long manageTeacherId = selectCourseMapper.getManageTeacherIdByCourseId(course.getCourseId());
         vo.setManagerTeacher(teacherMapper.selectById(manageTeacherId));
         List<SelectCourse> selectCourseList = selectCourseMapper.selectList(new QueryWrapper<SelectCourse>().eq("course_id", course.getCourseId()));
@@ -83,7 +85,8 @@ implements CourseService{
         List<CourseInfoVo> list = page.getRecords().stream().map(course -> {
             CourseInfoVo infoVo = new CourseInfoVo();
             BeanUtils.copyProperties(course, infoVo);
-            infoVo.setType(courseTypeMapper.getNameById(course.getType()));
+            infoVo.setTypeName(courseTypeMapper.getNameById(course.getTypeId()));
+            infoVo.setTypeId(course.getTypeId());
             infoVo.setCollegeName(collegeMapper.getNameById(course.getCourseId()));
             Long manageTeacherId = selectCourseMapper.getManageTeacherIdByCourseId(course.getCourseId());
             infoVo.setManagerTeacher(teacherMapper.selectById(manageTeacherId));
@@ -103,6 +106,7 @@ implements CourseService{
         return voPage;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveCourse(CourseInfoVo course) {
         Course targetCourse = new Course();
@@ -112,13 +116,14 @@ implements CourseService{
         this.saveOrUpdate(targetCourse);
         selectCourseMapper.delete(new QueryWrapper<SelectCourse>().eq("course_id",course.getCourseId()));
         Teacher managerTeacher = course.getManagerTeacher();
-        course.getTeachers().forEach(teacher->{
+        selectCourseMapper.insert(new SelectCourse(managerTeacher.getTeacherId(),course.getCourseId(),1));
+        for (Teacher teacher : course.getTeachers()) {
             SelectCourse selectCourse = new SelectCourse(teacher.getTeacherId(),course.getCourseId(),0);
-            if (teacher.equals(managerTeacher)){
-                selectCourse.setIsAuthorized(1);
+            if (teacher.getTeacherId().equals(managerTeacher.getTeacherId())){
+                continue;
             }
             selectCourseMapper.insert(selectCourse);
-        });
+        }
     }
 
     @Override
@@ -132,7 +137,7 @@ implements CourseService{
             Teacher managerTeacher = teacherMapper.selectById(selectCourse.getTeacherId());
             courseInfoVo.setManagerTeacher(managerTeacher);
             courseInfoVo.setCollegeName(collegeMapper.getNameById(course.getCourseId()));
-            courseInfoVo.setType(courseTypeMapper.getNameById(course.getType()));
+            courseInfoVo.setTypeName(courseTypeMapper.getNameById(course.getTypeId()));
             List<SelectCourse> selectCourseList2 = selectCourseMapper.selectList(new QueryWrapper<SelectCourse>().eq("course_id", course.getCourseId()));
             ArrayList<Teacher> teachers = new ArrayList<>();
             selectCourseList2.forEach(selectCourse2 -> {

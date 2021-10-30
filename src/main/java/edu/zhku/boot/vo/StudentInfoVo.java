@@ -1,6 +1,5 @@
 package edu.zhku.boot.vo;
 
-import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -26,6 +25,9 @@ public class StudentInfoVo {
 
     @ApiModelProperty("专业")
     private String major;
+
+    @ApiModelProperty("专业")
+    private Long majorId;
 
     @ApiModelProperty("性别")
     private Integer gender;
