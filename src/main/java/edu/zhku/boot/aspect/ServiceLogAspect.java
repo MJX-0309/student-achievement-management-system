@@ -14,12 +14,14 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 public class ServiceLogAspect {
-    @Around("execution(* edu.zhku.boot.service.impl..*.*(..))")
+    private final ThreadLocal<Long> threadLocal= new ThreadLocal<>();
+
+    @Around("execution(* edu.zhku.boot.controller..*.*(..))")
     public Object serviceLog(ProceedingJoinPoint pjp) throws Throwable{
-        long begin = System.currentTimeMillis();
+        threadLocal.set(System.currentTimeMillis());
         Object proceed = pjp.proceed();
         long end = System.currentTimeMillis();
-        log.warn("执行 {} {} 花费了 {} 毫秒",pjp.getTarget().getClass(),pjp.getSignature().getName(),end-begin);
+        log.warn("执行 {} {} 花费了 {} 毫秒",pjp.getTarget().getClass(),pjp.getSignature().getName(),end-threadLocal.get());
         return proceed;
     }
 }

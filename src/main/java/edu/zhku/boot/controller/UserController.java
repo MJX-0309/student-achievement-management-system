@@ -9,6 +9,7 @@ import edu.zhku.boot.vo.LoginVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -44,7 +45,9 @@ public class UserController {
         Account account = accountService.getById(teacherId);
         map.put("teacherId",teacherId);
         map.put("name",name);
-        map.put("role",account.getRole()==0?"ADMIN":"TEACHER");
+        ArrayList<String> roles = new ArrayList<>();
+        roles.add(account.getRole()==0?"ADMIN":"TEACHER");
+        map.put("roles",roles);
         return Result.success(map);
     }
 

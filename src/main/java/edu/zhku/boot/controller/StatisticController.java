@@ -39,7 +39,6 @@ public class StatisticController {
         String fileName=name+"学生名单";
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setCharacterEncoding("utf-8");
-        // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
         String s = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
         response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + s + ".xlsx");
         EasyExcel.write(response.getOutputStream(),StudentScoreVo.class)
