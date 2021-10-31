@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import edu.zhku.boot.entity.College;
 import edu.zhku.boot.entity.Major;
 import edu.zhku.boot.entity.Score;
 import edu.zhku.boot.entity.Student;
@@ -12,6 +13,7 @@ import edu.zhku.boot.mapper.MajorMapper;
 import edu.zhku.boot.mapper.ScoreMapper;
 import edu.zhku.boot.service.StudentService;
 import edu.zhku.boot.mapper.StudentMapper;
+import edu.zhku.boot.vo.StudentCascadeVo;
 import edu.zhku.boot.vo.StudentInfoVo;
 import edu.zhku.boot.vo.StudentQueryVo;
 import edu.zhku.boot.vo.StudentScoreVo;
@@ -89,6 +91,40 @@ implements StudentService{
 
             BeanUtils.copyProperties(score,scoreVo);
             list.add(scoreVo);
+        });
+        return list;
+    }
+
+    @Override
+    public List<StudentCascadeVo> getCascade() {
+        List<StudentCascadeVo> list = new ArrayList<>();
+        List<College> colleges = collegeMapper.selectList(null);
+        colleges.forEach(college->{
+            StudentCascadeVo vo1 = new StudentCascadeVo();
+            vo1.setName(college.getName());
+            vo1.setValue(college.getCollegeId());
+            vo1.setLeaf(false);
+            ArrayList<StudentCascadeVo> list2 = new ArrayList<>();
+            List<Major> majors = majorMapper.selectList(new QueryWrapper<Major>().eq("college_id", college.getCollegeId()));
+            majors.forEach(major->{
+                ArrayList<StudentCascadeVo> list3 = new ArrayList<>();
+                StudentCascadeVo vo2 = new StudentCascadeVo();
+                vo2.setName(major.getName());
+                vo2.setValue(major.getMajorId());
+                vo2.setLeaf(false);
+                List<Student> students = baseMapper.selectList(new QueryWrapper<Student>().eq("major_id", major.getMajorId()));
+                students.forEach(student -> {
+                    StudentCascadeVo vo3 = new StudentCascadeVo();
+                    vo3.setLeaf(true);
+                    vo3.setName(student.getName());
+                    vo3.setValue(student.getStudentId());
+                    list3.add(vo3);
+                });
+                list2.add(vo2);
+                vo2.setChildren(list3);
+            });
+            vo1.setChildren(list2);
+            list.add(vo1);
         });
         return list;
     }

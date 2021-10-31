@@ -5,7 +5,6 @@ spring:
       filter:
         stat:
           log-slow-sql: true
-          slow-sql-millis:
     url: jdbc:mysql://39.108.234.60:3306/student_achievement
     username: root
     password: 1585225345
@@ -14,6 +13,9 @@ spring:
     date-format: yyyy-MM-dd
   redis:
     host: 39.108.234.60
+    lettuce:
+      pool:
+        min-idle: 4
 
 thread:
   core-size: 20

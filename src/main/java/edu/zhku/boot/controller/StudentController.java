@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import edu.zhku.boot.common.model.Result;
 import edu.zhku.boot.entity.Student;
 import edu.zhku.boot.service.StudentService;
+import edu.zhku.boot.vo.StudentCascadeVo;
 import edu.zhku.boot.vo.StudentInfoVo;
 import edu.zhku.boot.vo.StudentQueryVo;
 import edu.zhku.boot.vo.StudentScoreVo;
@@ -58,6 +59,13 @@ public class StudentController {
     @GetMapping("/getByCourse/{id}")
     public Result getByCourse(@PathVariable Long id) {
         List<StudentScoreVo> list = studentService.getByCourse(id);
+        return Result.success(list);
+    }
+
+    @ApiOperation("获取级联数据")
+    @GetMapping("/getCascade")
+    public Result getCascade(){
+        List<StudentCascadeVo> list = studentService.getCascade();
         return Result.success(list);
     }
 }
