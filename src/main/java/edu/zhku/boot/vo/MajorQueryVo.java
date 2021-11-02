@@ -15,5 +15,5 @@ public class MajorQueryVo {
     private String keyword;
 
     @ApiModelProperty("学院")
-    private Long college;
+    private Long collegeId;
 }

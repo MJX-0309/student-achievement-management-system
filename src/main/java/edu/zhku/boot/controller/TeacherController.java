@@ -13,19 +13,13 @@ import edu.zhku.boot.vo.TeacherQueryVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Delete;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.ResultSet;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.FutureTask;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.stream.Collectors;
 
 /**
  * @author MJX
@@ -34,7 +28,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Api("教师管理Api")
 @RestController
-@RequestMapping("teacher")
+@RequestMapping("/teacher")
 public class TeacherController {
 
     @Autowired
@@ -45,6 +39,7 @@ public class TeacherController {
 
     @Autowired
     private ThreadPoolExecutor executor;
+
     @ApiOperation("通过id获取")
     @GetMapping("/getById/{id}")
     public Result getById(@PathVariable Long id){

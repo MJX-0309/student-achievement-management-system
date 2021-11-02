@@ -56,14 +56,19 @@ implements StudentService{
         Page<Student> page = new Page<>();
         Page<StudentInfoVo> voPage = new Page<>();
         QueryWrapper<Student> wrapper = new QueryWrapper<>();
-
-        if (StringUtils.hasText(queryVo.getKeyword())){
-            wrapper.like("student_id",queryVo.getKeyword())
-                    .or()
-                    .like("name",queryVo.getKeyword())
-                    .or()
-                    .like("remark",queryVo.getKeyword());
+        if (queryVo.getMajorId()!=null){
+            wrapper.eq("major_id",queryVo.getMajorId());
         }
+        if (StringUtils.hasText(queryVo.getKeyword())){
+            wrapper.and(studentQueryWrapper -> {
+                studentQueryWrapper.like("student_id",queryVo.getKeyword())
+                        .or()
+                        .like("name",queryVo.getKeyword())
+                        .or()
+                        .like("remark",queryVo.getKeyword());
+            });
+        }
+
         baseMapper.selectPage(page,wrapper);
         BeanUtils.copyProperties(page,voPage);
         List<StudentInfoVo> list = page.getRecords().stream().map(student -> {

@@ -10,4 +10,6 @@ import edu.zhku.boot.vo.LoginVo;
 public interface AccountService extends IService<Account> {
 
     String login(LoginVo loginVo);
+
+    void changePassword(Long teacherId, String oldPassword, String newPassword);
 }

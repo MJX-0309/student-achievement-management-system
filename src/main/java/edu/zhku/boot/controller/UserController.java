@@ -31,8 +31,9 @@ public class UserController {
         return Result.success(token);
     }
 
-    @PostMapping("/changePassword")
-    public Result changePassword(Account account){
+    @PutMapping("/changePassword")
+    public Result changePassword(Long teacherId,String oldPassword, String newPassword){
+        accountService.changePassword(teacherId,oldPassword,newPassword);
         return Result.success();
     }
 

@@ -1,7 +1,5 @@
 package edu.zhku.boot.vo;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -20,7 +18,7 @@ public class TeacherInfoVo {
     private Long teacherId;
 
     @ApiModelProperty("学院id")
-    private String collegeId;
+    private Long collegeId;
 
     @ApiModelProperty("学院名")
     private String collegeName;
@@ -30,6 +28,12 @@ public class TeacherInfoVo {
 
     @ApiModelProperty("性别")
     private Integer gender;
+
+    @ApiModelProperty("手机号")
+    private String phone;
+
+    @ApiModelProperty("邮箱")
+    private String email;
 
     @ApiModelProperty("生日")
     private Date birth;

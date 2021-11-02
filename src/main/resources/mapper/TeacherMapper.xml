@@ -15,7 +15,7 @@
 
     <sql id="Base_Column_List">
         teacher_id,college_id,name,
-        college,gender,birth,
+        college,gender,birth,phone,email
         remark
     </sql>
 

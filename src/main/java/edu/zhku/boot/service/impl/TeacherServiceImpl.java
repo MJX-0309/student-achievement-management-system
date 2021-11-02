@@ -26,15 +26,16 @@ import java.util.stream.Collectors;
  */
 @Service
 public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher>
-implements TeacherService{
+        implements TeacherService {
 
     @Autowired
     private CollegeMapper collegeMapper;
+
     @Override
     public TeacherInfoVo getTeacherById(Long id) {
         Teacher teacher = baseMapper.selectById(id);
         TeacherInfoVo vo = new TeacherInfoVo();
-        BeanUtils.copyProperties(teacher,vo);
+        BeanUtils.copyProperties(teacher, vo);
         vo.setCollegeName(collegeMapper.getNameById(teacher.getTeacherId()));
         return vo;
     }
@@ -44,22 +45,25 @@ implements TeacherService{
         Page<Teacher> page = new Page<>(current, size);
         Page<TeacherInfoVo> voPage = new Page<>(current, size);
         QueryWrapper<Teacher> wrapper = new QueryWrapper<>();
-        if (StringUtils.hasText(queryVo.getKeyword())){
-            wrapper.like("name", queryVo.getKeyword())
-                    .or()
-                    .like("remark", queryVo.getKeyword());
+        if (queryVo.getCollegeId() != null) {
+            wrapper.eq("college_id", queryVo.getCollegeId());
         }
-        if (queryVo.getCollege()!=null){
-            wrapper.eq("college_id", queryVo.getCollege());
+        if (StringUtils.hasText(queryVo.getKeyword())) {
+            wrapper.and(wrapper2 -> {
+                wrapper2.like("name", queryVo.getKeyword())
+                        .or()
+                        .like("remark", queryVo.getKeyword());
+            });
         }
+
         List<TeacherInfoVo> collect = baseMapper.selectPage(page, wrapper).getRecords().stream().map(teacher -> {
             TeacherInfoVo vo = new TeacherInfoVo();
-            BeanUtils.copyProperties(teacher,vo);
+            BeanUtils.copyProperties(teacher, vo);
             vo.setCollegeName(collegeMapper.getNameById(teacher.getCollegeId()));
             return vo;
         }).collect(Collectors.toList());
 
-        BeanUtils.copyProperties(page,voPage);
+        BeanUtils.copyProperties(page, voPage);
         voPage.setRecords(collect);
         return voPage;
     }

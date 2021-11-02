@@ -46,6 +46,19 @@ implements AccountService{
         }
     }
 
+    @Override
+    public void changePassword(Long teacherId, String oldPassword, String newPassword) {
+        Account account = baseMapper.selectById(teacherId);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        boolean matches = encoder.matches(oldPassword, account.getPassword());
+        if (matches){
+            account.setPassword(encoder.encode(newPassword));
+            baseMapper.insert(account);
+        }else {
+            throw new RuntimeException("原密码不正确");
+        }
+    }
+
 
     private boolean validateCaptcha( String code, String uuid) {
         String verifyKey = RedisConstant.CAPTCHA_KEY+ uuid;

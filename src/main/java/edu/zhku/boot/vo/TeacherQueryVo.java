@@ -13,6 +13,6 @@ public class TeacherQueryVo {
 
     private String keyword;
 
-    private Long college;
+    private Long collegeId;
 
 }

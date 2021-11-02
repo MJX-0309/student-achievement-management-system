@@ -1,7 +1,6 @@
 package edu.zhku.boot.vo;
 
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -13,5 +12,5 @@ import lombok.Data;
 public class StudentQueryVo {
     private String keyword;
 
-    private Integer major;
+    private Integer majorId;
 }

@@ -45,10 +45,13 @@ implements MajorService{
         Page<Major> page = new Page<>(current,size);
         Page<MajorInfoVo> voPage = new Page<>();
         QueryWrapper<Major> wrapper = new QueryWrapper<>();
+        if (queryVo.getCollegeId()!=null){
+            wrapper.eq("college_id",queryVo.getCollegeId());
+        }
         if (StringUtils.hasText(queryVo.getKeyword())){
-            wrapper.like("major_id",queryVo.getKeyword())
+            wrapper.and(majorQueryWrapper -> majorQueryWrapper.like("major_id",queryVo.getKeyword())
                     .or()
-                    .like("name",queryVo.getKeyword());
+                    .like("name",queryVo.getKeyword()));
         }
         baseMapper.selectPage(page,wrapper);
         BeanUtils.copyProperties(page,voPage);

@@ -79,15 +79,17 @@ implements CourseService{
         Page<CourseInfoVo> voPage = new Page<>();
         QueryWrapper<Course> wrapper = new QueryWrapper<>();
         if (vo.getType()!=null){
-            wrapper.eq("type",vo.getType());
+            wrapper.eq("type_id",vo.getType());
         }
         if (vo.getCollegeId()!=null){
             wrapper.eq("college_id" ,vo.getCollegeId());
         }
         if (StringUtils.hasText(vo.getKeyword())){
-            wrapper.like("name",vo.getKeyword())
-                    .or()
-                    .like("course_id",vo.getKeyword());
+            wrapper.and(wrapper2->{
+                wrapper2.like("name",vo.getKeyword())
+                        .or()
+                        .like("course_id",vo.getKeyword());
+            });
         }
         baseMapper.selectPage(page,wrapper);
         BeanUtils.copyProperties(page,voPage);
