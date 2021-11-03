@@ -53,7 +53,7 @@ implements AccountService{
         boolean matches = encoder.matches(oldPassword, account.getPassword());
         if (matches){
             account.setPassword(encoder.encode(newPassword));
-            baseMapper.insert(account);
+            baseMapper.updateById(account);
         }else {
             throw new RuntimeException("原密码不正确");
         }
